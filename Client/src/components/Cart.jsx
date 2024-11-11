@@ -1,15 +1,15 @@
-import React from "react";
-import { loadStripe } from "@stripe/stripe-js";
-
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+import React, { useState } from "react";
 
 function Cart({ cart, setCart }) {
+  const [isLoading, setIsLoading] = useState(false);
+
   const cartIsEmpty = cart.length === 0;
 
   const handleCheckout = async () => {
     console.log("Attempting to checkout with cart:", cart);
 
     try {
+      setIsLoading(true);
       const response = await fetch(
         "http://localhost:4040/create-checkout-session",
         {
@@ -23,12 +23,8 @@ function Cart({ cart, setCart }) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      // const session = await response.json();
-      // const stripe = await stripePromise;
-
       const data = await response.json();
 
-      // Redirect to the Stripe checkout URL
       window.location.href = data.url;
 
       if (error) {
@@ -36,6 +32,8 @@ function Cart({ cart, setCart }) {
       }
     } catch (error) {
       console.error("Error during checkout:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -94,10 +92,11 @@ function Cart({ cart, setCart }) {
           ))}
 
           <button
+            disabled={isLoading}
             onClick={handleCheckout}
             className="w-full text-sm md:text-base px-4 py-2 mt-3 bg-teal-700 text-white rounded-md hover:bg-teal-600 transition duration-200"
           >
-            Checkout
+            {isLoading ? "Processing..." : "Proceed to checkout"}
           </button>
         </div>
       )}
