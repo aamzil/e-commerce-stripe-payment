@@ -11,7 +11,7 @@ function Cart({ cart, setCart }) {
     try {
       setIsLoading(true);
       const response = await fetch(
-        "https://stripe-payement-server.vercel.app/create-checkout-session",
+        "https://e-commerce-stripe-payment-server.vercel.app/create-checkout-session",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
