@@ -1,12 +1,18 @@
 require("dotenv").config();
-const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+const stripeSecretKey = process.env.REACT_SECRET_KEY;
 const express = require("express");
 const stripe = require("stripe")(stripeSecretKey);
 const cors = require("cors");
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: ["https://stripepaymentstore.vercel.app"],
+    methods: ["GET", "POST"],
+    credentials: true,
+  })
+);
 
 app.post("/create-checkout-session", async (req, res) => {
   const { cart } = req.body;
@@ -40,5 +46,5 @@ app.post("/create-checkout-session", async (req, res) => {
   }
 });
 
-const PORT = 4040;
-app.listen(PORT, () => console.log(`running on port ${PORT}`));
+// const PORT = 4040;
+// app.listen(PORT, () => console.log(`running on port ${PORT}`));
