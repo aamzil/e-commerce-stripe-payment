@@ -46,5 +46,7 @@ app.post("/create-checkout-session", async (req, res) => {
   }
 });
 
+module.exports = app;
+
 // const PORT = 4040;
 // app.listen(PORT, () => console.log(`running on port ${PORT}`));
